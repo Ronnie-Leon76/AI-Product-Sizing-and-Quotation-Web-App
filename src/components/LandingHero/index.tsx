@@ -12,12 +12,12 @@ const HeroSection = async () => {
   return (
     <div className="text-center py-20 md:py-32 space-y-10">
       <h1 className="text-4xl md:text-6xl font-extrabold">
-        <span className="text-neutral-800">The Best AI Tool for</span>
+        <span className="text-neutral-800">The Best AI Tool for Product Sizing & Quotation</span>
         <br />
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-green-600">
+        <span className="bg-clip-text bg-gradient-to-r from-yellow-400 to-green-600">
           <TypewriterComponent
             options={{
-              strings: ["Backup Energy Calculation", "Product Quotation"],
+              strings: ["Client Energy Demand Sizing", "Power Backup Product Quotation"],
               autoStart: true,
               loop: true,
             }}
