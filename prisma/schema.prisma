@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  fullname  String
+  clerkId   String   @unique
+  createdAt DateTime @default(now())
+  email     String   @unique
+  updatedAt DateTime @updatedAt
+
+  quotations Quotation[] @relation("UserQuotations")
+  chats      Chat[]      @relation("UserChats")
+}
+
+model Quotation {
+  id               String      @id @default(uuid())
+  name             String
+  subtotal         Float
+  vat              Float
+  grand_total      Float
+  explanation      String
+  additional_notes String
+  pdfUrl           String?
+  components       Component[] @relation("QuotationComponents")
+  userId           String
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserQuotations")
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model Component {
+  id                String   @id @default(uuid())
+  product_model     String
+  item_category_code String
+  description       String
+  quantity          Int
+  unit_price        Float
+  gross_price       Float
+  quotationId       String
+  quotation         Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade, name: "QuotationComponents")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+
+model Chat {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserChats")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  messages  Message[]
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+}
