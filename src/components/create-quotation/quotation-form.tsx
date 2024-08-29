@@ -12,50 +12,42 @@ import {
 import { Input } from "@/components/ui/input";
 import { QuotationOptions } from "@/constants/quotation-items";
 import { ItemData } from "./quotationButton";
+
 interface QuotationFormProps {
-  onChange: ( data: ItemData) => void;
+  onChange: (data: ItemData) => void;
   id: number;
 }
 
-
-
 const QuotationForm: React.FC<QuotationFormProps> = ({ onChange }) => {
-  const [category, setCategory] = useState<string | null>(null); 
-  const [item, setItem] = useState<string | null>(null); 
-  const [brand,setBrand] = useState<string | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
+  const [item, setItem] = useState<string | null>(null);
+  const [brandInfo, setBrandInfo] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [runningHours, setRunningHours] = useState<number>(1);
 
   const handleCategoryChange = (value: string) => {
     setCategory(value);
-    setItem(null); 
-     setBrand(null);
+    setItem(null);
+    setBrandInfo("");
   };
 
   const handleItemChange = (value: string) => {
     setItem(value);
-     setBrand(null);
+    setBrandInfo("");
   };
-    const handleBrandChange = (value: string) => {
-      setBrand(value); 
-    };
 
   const selectedCategoryItems = category
     ? QuotationOptions[category].items
     : {};
-  const selectedItemsBrands = item ? selectedCategoryItems[item] : [];
-
 
   useEffect(() => {
     onChange({
       item_name: item || "",
-      item_model_name: brand || "",
+      item_model_name: brandInfo,
       item_quantity: quantity,
       running_hours: runningHours,
     });
-  }, [category, item, quantity, runningHours]);
-
- 
+  }, [category, item, brandInfo, quantity, runningHours]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -94,26 +86,18 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onChange }) => {
         </SelectContent>
       </Select>
 
-      {/* Brand Select */}
-      <Select disabled={!item} onValueChange={handleBrandChange}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select Brand" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Brand</SelectLabel>
-            {item &&
-              selectedItemsBrands.map((brand) => (
-                <SelectItem key={brand} value={brand.toLowerCase()}>
-                  {brand}
-                </SelectItem>
-              ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      {/* Brand Info Input */}
+      <Input
+        type="text"
+        value={brandInfo}
+        onChange={(e) => setBrandInfo(e.target.value)}
+        placeholder="Size, brand name, additional info i.e. 32-inch Samsung OLED"
+        disabled={!item}
+      />
+
       <div className="flex space-x-4">
         <div className="w-fit flex flex-col">
-          <label className=" text-sm text-gray-700">Run Hours</label>
+          <label className="text-sm text-gray-700">Run Hours</label>
           <Input
             type="number"
             min="1"
@@ -125,7 +109,7 @@ const QuotationForm: React.FC<QuotationFormProps> = ({ onChange }) => {
 
         {/* Quantity Input */}
         <div className="w-fit flex flex-col">
-          <label className=" text-sm text-gray-700">Quantity</label>
+          <label className="text-sm text-gray-700">Quantity</label>
           <Input
             type="number"
             min="1"
