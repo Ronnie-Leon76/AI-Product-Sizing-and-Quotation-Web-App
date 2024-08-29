@@ -29,7 +29,7 @@ const layout = async ({ children }: Props) => {
       </div>
       <div className="hidden lg:flex flex-1 w-full max-h-full max-w-4000px overflow-hidden relative bg-cream  flex-col pt-10 pl-24 gap-3">
         <Image
-          src="/images/dashboardpic.png"
+          src="/images/panels_installation.jpg"
           alt="app image"
           loading="lazy"
           sizes="30"
