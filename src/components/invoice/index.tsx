@@ -1,212 +1,488 @@
 import { QuoteData } from "@/constants/quote-response";
-import Image from "next/image";
-import React from "react";
+import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 
 type Props = {
   quoteData: QuoteData;
 };
-
-const InvoiceTemplate = ({ quoteData }: Props) => {
-  return (
-    <div className="p-8 bg-white max-w-4xl mx-auto border border-gray-300 rounded-lg shadow-lg">
+const InvoiceTemplate = ({ quoteData }: Props) => (
+  <Document>
+    <Page
+      style={{
+        padding: 32,
+        fontFamily: "Helvetica",
+        fontSize: 14,
+        color: "#333",
+      }}
+    >
       {/* Header */}
-      <header className="text-right mb-8 flex flex-row justify-between">
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: 32,
+        }}
+      >
         <Image
-          src={"/images/DnsIMage.png"}
-          width={400}
-          height={400}
-          className="mt-2"
-          alt="Davis Logo"
+          src="../../images/DnsIMage.png"
+          style={{ width: 250, height: 150 }}
         />
-        <div className="text-right">
-          <h1 className="text-3xl font-bold text-gray-700">Invoice</h1>
-          <p className="text-gray-500">Davis and ShirtLiff</p>
-          <p className="text-gray-500">41762-00100, Nairobi Kenya</p>
-          <p className="text-gray-500">sales@dayliff.com</p>
-          <p className="text-gray-500">Phone: +254 712 345 678</p>
-        </div>
-      </header>
+        <View
+          style={{
+            textAlign: "right",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: "#2D3748" }}>
+            Invoice
+          </Text>
+          <Text style={{ color: "#4A5568" }}>Davis and ShirtLiff</Text>
+          <Text style={{ color: "#4A5568" }}>41762-00100, Nairobi Kenya</Text>
+          <Text style={{ color: "#4A5568" }}>sales@dayliff.com</Text>
+          <Text style={{ color: "#4A5568" }}>Phone: +254 712 345 678</Text>
+        </View>
+      </View>
 
-      {/* Tables for Each Option */}
       {Object.entries(quoteData).map(([key, option], index) => (
-        <div key={index} className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+        <View key={index} style={{ marginBottom: 48 }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              color: "#2D3748",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
             {option.name}
-          </h2>
-
-          {/* Subtotal, VAT, and Grand Total per Option */}
+          </Text>
 
           {/* Components Table */}
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="py-2 px-4 border-b text-left text-gray-600">
-                  Product
-                </th>
-                <th className="py-2 px-4 border-b text-left text-gray-600">
-                  Description
-                </th>
-                <th className="py-2 px-4 border-b text-left text-gray-600">
-                  Quantity
-                </th>
-                <th className="py-2 px-4 border-b text-left text-gray-600">
-                  Unit Price
-                </th>
-                <th className="py-2 px-4 border-b text-left text-gray-600">
-                  Gross Price
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Battery Components */}
-              {option.battery &&
-                option.battery.components.map((component, i) => (
-                  <tr key={i} className="hover:bg-gray-50">
-                    <td className="py-2 px-4 border-b">
-                      {component.product_model}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {component.description}
-                    </td>
-                    <td className="py-2 px-4 border-b">{component.quantity}</td>
-                    <td className="py-2 px-4 border-b">
-                      {component.unit_price.toLocaleString()}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {component.gross_price.toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              {/* Solar Panel Components */}
-              {option.solar_panel &&
-                option.solar_panel.components.map((component, i) => (
-                  <tr key={i} className="hover:bg-gray-50">
-                    <td className="py-2 px-4 border-b">
-                      {component.product_model}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {component.description}
-                    </td>
-                    <td className="py-2 px-4 border-b">{component.quantity}</td>
-                    <td className="py-2 px-4 border-b">
-                      {component.unit_price.toLocaleString()}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {component.gross_price.toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              {/* Inverter Components */}
-              {option.inverter.components.map((component, i) => (
-                <tr key={i} className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border-b">
-                    {component.product_model}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {component.description}
-                  </td>
-                  <td className="py-2 px-4 border-b">{component.quantity}</td>
-                  <td className="py-2 px-4 border-b">
-                    {component.unit_price.toLocaleString()}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {component.gross_price.toLocaleString()}
-                  </td>
-                </tr>
-              ))}
-              {/* Other Components */}
-              {option.other_components.map((component, i) => (
-                <tr key={i} className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border-b">
-                    {component.product_model}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {component.description}
-                  </td>
-                  <td className="py-2 px-4 border-b">{component.quantity}</td>
-                  <td className="py-2 px-4 border-b">
-                    {component.unit_price.toLocaleString()}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {component.gross_price.toLocaleString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {/* Subtotal, VAT, and Grand Total per Option */}
-          <div className="mb-4 text-gray-600 text-center">
-            {/* Top Bold Line */}
-            <div className="border-t border-gray-700 mt-4 mb-2"></div>
+          <View style={{ marginBottom: 16 }}>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                backgroundColor: "#F7FAFC",
+                fontWeight: "bold",
+                borderBottomWidth: 1,
+                borderBottomColor: "#E2E8F0",
+              }}
+            >
+              <Text
+                style={{
+                  padding: 8,
+                  flex: 1,
+                  color: "#4A5568",
+                  borderRightWidth: 1,
+                  borderRightColor: "#E2E8F0",
+                  textAlign: "left",
+                }}
+              >
+                Product
+              </Text>
+              <Text
+                style={{
+                  padding: 8,
+                  flex: 1,
+                  color: "#4A5568",
+                  borderRightWidth: 1,
+                  borderRightColor: "#E2E8F0",
+                  textAlign: "left",
+                }}
+              >
+                Description
+              </Text>
+              <Text
+                style={{
+                  padding: 8,
+                  flex: 1,
+                  color: "#4A5568",
+                  borderRightWidth: 1,
+                  borderRightColor: "#E2E8F0",
+                  textAlign: "left",
+                }}
+              >
+                Quantity
+              </Text>
+              <Text
+                style={{
+                  padding: 8,
+                  flex: 1,
+                  color: "#4A5568",
+                  borderRightWidth: 1,
+                  borderRightColor: "#E2E8F0",
+                  textAlign: "left",
+                }}
+              >
+                Unit Price
+              </Text>
+              <Text
+                style={{
+                  padding: 8,
+                  flex: 1,
+                  color: "#4A5568",
+                  textAlign: "left",
+                }}
+              >
+                Gross Price
+              </Text>
+            </View>
 
-            {/* Paragraphs */}
-            <div className="inline-block">
-              <p className="font-bold">
-                <strong>Subtotal: </strong>
-                {option.subtotal.toLocaleString()}
-              </p>
-              <p className="font-bold">
-                <strong>VAT: </strong>
-                {option.vat.toLocaleString()}
-              </p>
-              <p className="font-bold">
-                <strong>Grand Total: </strong>
-                {option.grand_total.toLocaleString()}
-              </p>
-            </div>
+            {option.battery &&
+              option.battery.components.map((component, i) => (
+                <View
+                  key={i}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    backgroundColor: i % 2 === 0 ? "transparent" : "#F7FAFC",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#E2E8F0",
+                  }}
+                >
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.product_model}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.description}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.quantity}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.unit_price.toLocaleString()}
+                  </Text>
+                  <Text style={{ padding: 8, flex: 1 }}>
+                    {component.gross_price.toLocaleString()}
+                  </Text>
+                </View>
+              ))}
+            {option.solar_panel &&
+              option.solar_panel.components.map((component, i) => (
+                <View
+                  key={i}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    backgroundColor: i % 2 === 0 ? "transparent" : "#F7FAFC",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#E2E8F0",
+                  }}
+                >
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.product_model}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.description}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.quantity}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.unit_price.toLocaleString()}
+                  </Text>
+                  <Text style={{ padding: 8, flex: 1 }}>
+                    {component.gross_price.toLocaleString()}
+                  </Text>
+                </View>
+              ))}
+            {option.inverter &&
+              option.inverter.components.map((component, i) => (
+                <View
+                  key={i}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    backgroundColor: i % 2 === 0 ? "transparent" : "#F7FAFC",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#E2E8F0",
+                  }}
+                >
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.product_model}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.description}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.quantity}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.unit_price.toLocaleString()}
+                  </Text>
+                  <Text style={{ padding: 8, flex: 1 }}>
+                    {component.gross_price.toLocaleString()}
+                  </Text>
+                </View>
+              ))}
+            {option.other_components &&
+              option.other_components.map((component, i) => (
+                <View
+                  key={i}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    backgroundColor: i % 2 === 0 ? "transparent" : "#F7FAFC",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#E2E8F0",
+                  }}
+                >
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.product_model}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.description}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.quantity}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 8,
+                      flex: 1,
+                      borderRightWidth: 1,
+                      borderRightColor: "#E2E8F0",
+                    }}
+                  >
+                    {component.unit_price.toLocaleString()}
+                  </Text>
+                  <Text style={{ padding: 8, flex: 1 }}>
+                    {component.gross_price.toLocaleString()}
+                  </Text>
+                </View>
+              ))}
+          </View>
 
-            {/* Bottom Underlines */}
-            <div className="border-t border-gray-300 mt-4 mb-2"></div>
-            <div className="border-t border-gray-300"></div>
-          </div>
+          {/* Subtotal, VAT, and Grand Total */}
+          <View
+            style={{
+              textAlign: "center",
+              color: "#4A5568",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              marginTop: 16,
+              borderTopWidth: 2,
+              fontSize: "18",
+              borderTopColor: "#4A5568",
+              paddingTop: 8,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                marginBottom: 4,
+                alignItems: "center",
+              }}
+            >
+              Subtotal: {option.subtotal.toLocaleString()}
+            </Text>
+            <Text style={{ fontWeight: "bold", marginBottom: 4 }}>
+              VAT: {option.vat.toLocaleString()}
+            </Text>
+            <Text style={{ fontWeight: "bold" }}>
+              Grand Total: {option.grand_total.toLocaleString()}
+            </Text>
+          </View>
 
           {/* Explanation */}
-          <div className="mt-4 text-gray-600">
-            <p>
-              <strong>Explanation: </strong>
-              {option.explanation}
-            </p>
-          </div>
-        </div>
+          <View
+            style={{
+              marginTop: 16,
+              color: "#4A5568",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              marginBottom: 16,
+            }}
+          >
+            <Text style={{ fontWeight: "bold", lineHeight: 1.6 }}>
+              Explanation:
+            </Text>
+            <Text style={{ lineHeight: 1.6 }}>{option.explanation}</Text>
+          </View>
+        </View>
       ))}
 
       {/* Footer */}
-      <footer className="mt-8 text-gray-600">
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold">Additional Notes:</h3>
-          {Object.values(quoteData).map((option, index) => (
-            <p key={index} className="mt-1">
-              {option.additional_notes}
-            </p>
-          ))}
-        </div>
-        <div className="text-center">
-          <h3 className="text-xl font-semibold">VAT & Grand Total</h3>
-          <p className="mt-1">
-            <strong>Total VAT: </strong>
-            {Object.values(quoteData).reduce(
-              (sum, option) => sum + option.vat,
-              0
-            )}
-          </p>
-          <p className="mt-1">
-            <strong>Grand Total: </strong>
-            {Object.values(quoteData).reduce(
-              (sum, option) => sum + option.grand_total,
-              0
-            )}
-          </p>
-        </div>
-        <div className="mt-8 text-center">
-          <p className="text-lg font-semibold">Advice</p>
-          <p className="text-gray-500">
+      <View
+        style={{
+          marginTop: 32,
+          color: "#4A5568",
+          textAlign: "left",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "semibold",
+            marginBottom: 16,
+            textAlign: "center",
+          }}
+        >
+          Additional Notes:
+        </Text>
+        {Object.values(quoteData).map((option, index) => (
+          <Text key={index} style={{ marginBottom: 4 }}>
+            {option.additional_notes}
+          </Text>
+        ))}
+        <View
+          style={{
+            marginTop: 32,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{ fontSize: 20, fontWeight: "semibold", marginBottom: 16 }}
+          >
+            VAT & Grand Total
+          </Text>
+          <Text style={{ fontSize: 20 }}>
+            <Text style={{ fontWeight: "bold" }}>Total VAT: </Text>
+            {Object.values(quoteData)
+              .reduce((sum, option) => sum + option.vat, 0)
+              .toLocaleString()}
+          </Text>
+          <Text style={{ fontSize: 20 }}>
+            <Text style={{ fontWeight: "bold" }}>Grand Total: </Text>
+            {Object.values(quoteData)
+              .reduce((sum, option) => sum + option.grand_total, 0)
+              .toLocaleString()}
+          </Text>
+        </View>
+        <View style={{ marginTop: 32 }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "semibold",
+              marginBottom: 8,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            Advice
+          </Text>
+          <Text style={{ fontSize: "16" }}>
             Please review the details and feel free to reach out with any
             questions or adjustments needed.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-};
+          </Text>
+        </View>
+      </View>
+    </Page>
+  </Document>
+);
 
 export default InvoiceTemplate;

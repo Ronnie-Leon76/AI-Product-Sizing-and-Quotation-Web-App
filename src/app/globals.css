@@ -66,4 +66,19 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  @media print {
+  .pdf-page {
+    page-break-after: always;
+  }
+}
+
+.page-break {
+  page-break-after: always;
+}
+
+.break-inside-avoid {
+  break-inside: avoid;
+}
+
 }

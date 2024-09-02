@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { Send } from "lucide-react";
 import axios from "axios";
 import LoadingDialog from "../loader/loadingSpinner";
+import { useRouter } from "next/navigation";
 
 const ChatInterface = ({ userId }: { userId: string }) => {
   const [chatContent, setChatContent] = useState<any[]>([]);
@@ -12,6 +13,8 @@ const ChatInterface = ({ userId }: { userId: string }) => {
   const [chatId, setChatId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const messageEndRef = useRef<HTMLDivElement>(null);
+
+  const router = useRouter()
 
   useEffect(() => {
     const createChat = async () => {
@@ -77,6 +80,7 @@ const ChatInterface = ({ userId }: { userId: string }) => {
           console.log("Response Data refined:", refineResponse.data);
           const quoteData = refineResponse.data;
           sessionStorage.setItem("quoteData", JSON.stringify(quoteData));
+          router.refresh()
         } else {
           console.error(`Unexpected status code: ${refineResponse.status}`);
         }
